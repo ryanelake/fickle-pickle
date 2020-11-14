@@ -13,7 +13,7 @@ def close():
 def converse(event=None):
     global emotion
     newUserText = editOutput(user_in.get())
-    bot_response = chatbot.get_response(user_in.get())
+    bot_response = fickle.get_response(user_in.get())
     newAIText = editOutput(bot_response.text)
     user_out.delete("1.0","end")
     user_out.insert(END, newUserText, "center")
@@ -84,18 +84,20 @@ def frame1Back():
     front.lower(ai_out)
     root.after(75, frame0)
     
-chatbot = ChatBot(
-        "Ron",
+fickle = ChatBot(
+        "Fickle the Pickle",
         storage_adapter='chatterbot.storage.SQLStorageAdapter',
         logic_adapters=[
             'chatterbot.logic.BestMatch'
         ],
-        database_uri='sqlite:///database.db'
-        )
+        database_uri='sqlite:///untraineddatabase.db'
+        )      
 
-trainer = ChatterBotCorpusTrainer(chatbot)
 
-trainer.train("chatterbot.corpus.english")
+Utrainer = ChatterBotCorpusTrainer(fickle)
+
+Utrainer.train("./personalTrainer/")
+
 
 urllib.request.urlretrieve("https://raw.githubusercontent.com/ryanelake/fickle-pickle/main/icon.ico", "icon.ico")
 urllib.request.urlretrieve("https://raw.githubusercontent.com/ryanelake/fickle-pickle/main/back_pickle.png", "back.png")
