@@ -1,7 +1,6 @@
 from tkinter import *
 import urllib.request
 import random
-import time
 from chatterbot import ChatBot
 from chatterbot.trainers import ListTrainer
 from chatterbot.trainers import ChatterBotCorpusTrainer
@@ -35,11 +34,18 @@ def editOutput(output):
     for i in range(len(output)):
         if output[i] == " ":
             toEdit = toEdit[1:]
-            if len(temp) + len(toEdit[0:toEdit.find(" ")]) > 18:
-                toReturn += temp + "\n"
-                temp = ""
+            if toEdit.find(" ") != -1:
+                if len(temp) + len(toEdit[0:toEdit.find(" ")]) > 18:
+                    toReturn += temp + "\n"
+                    temp = ""
+                else:
+                    temp += " "
             else:
-                temp += " "
+                if len(temp) + len(toEdit) > 18:
+                    toReturn += temp + "\n"
+                    temp = ""
+                else:
+                    temp += " "
         else:
             temp += output[i]
             toEdit = toEdit[1:]
@@ -60,7 +66,7 @@ def frame1():
     front = Label(root, image=animations[emotion][frame], bg="#f3f7d6")
     front.place(x=400,y=0)
     front.lower(ai_out)
-    root.after(50, frame2)
+    root.after(75, frame2)
 
 #Part of blinking animation
 def frame2():
@@ -68,7 +74,7 @@ def frame2():
     front = Label(root, image=animations[emotion][frame], bg="#f3f7d6")
     front.place(x=400,y=0)
     front.lower(ai_out)
-    root.after(50, frame1Back)
+    root.after(75, frame1Back)
 
 #Part of blinking animation
 def frame1Back():
@@ -76,7 +82,7 @@ def frame1Back():
     front = Label(root, image=animations[emotion][frame], bg="#f3f7d6")
     front.place(x=400,y=0)
     front.lower(ai_out)
-    root.after(50, frame0)
+    root.after(75, frame0)
     
 chatbot = ChatBot(
         "Ron",
@@ -119,12 +125,12 @@ animations = [[PhotoImage(file="happy_base.png"), PhotoImage(file="happy_half.pn
          [PhotoImage(file="mad_base.png"), PhotoImage(file="mad_half.png"), PhotoImage(file="mad_close.png")]]
 front = Label(root, image=animations[emotion][frame], bg="#f3f7d6")
 front.place(x=400,y=0)
-user_in = Entry(width=58)
+user_in = Entry(width=113)
 user_in.place(x=5,y=475)
 temp = Button(text="Enter", width = 7,command=converse)
-temp.place(x=370,y=470)
+temp.place(x=700,y=470)
 temp = Button(text="Quit", width = 6, command=close)
-temp.place(x=440,y=470)
+temp.place(x=770,y=470)
 user_out = Text(root, height=5, width = 19, bd=0)
 user_out.tag_configure("center",justify='center')
 user_out.place(x=195,y=260)
