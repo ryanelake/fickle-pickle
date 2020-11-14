@@ -5,7 +5,6 @@ from chatterbot import ChatBot
 from chatterbot.trainers import ListTrainer
 from chatterbot.trainers import ChatterBotCorpusTrainer
 
-'''
 chatbot = ChatBot(
         "Ron",
         storage_adapter='chatterbot.storage.SQLStorageAdapter',
@@ -18,7 +17,6 @@ chatbot = ChatBot(
 trainer = ChatterBotCorpusTrainer(chatbot)
 
 trainer.train("chatterbot.corpus.english")
-'''
 
 #Closes the application
 def close():
@@ -27,11 +25,13 @@ def close():
 #18 characters
 def converse(event=None):
     newUserText = editOutput(user_in.get())
+    bot_response = chatbot.get_response(user_in.get())
+    newAIText = editOutput(bot_response.text)
+    user_in.delete(0,END)
     user_out.delete("1.0","end")
     user_out.insert(END, newUserText, "center")
-    #bot_response = chatbot.get_response(user_in.get())
-    #print("Computer: ", bot_response)
-    user_in.delete(0,len(user_in.get()))
+    ai_out.delete("1.0","end")
+    ai_out.insert(END, newAIText, "center")
 
 def editOutput(output):
     toEdit = output[:]
@@ -74,7 +74,7 @@ root.bind('<Return>', converse)
 
 back = PhotoImage(file="back.png")
 Label(root, image=back, bg="#f3f7d6").place(x=-50,y=200)
-front = PhotoImage(file="happy_base.png")
+front = PhotoImage(file="happy_half.png")
 Label(root, image=front, bg="#f3f7d6").place(x=400,y=0)
 user_in = Entry(width=58)
 user_in.place(x=5,y=475)
@@ -85,5 +85,8 @@ temp.place(x=440,y=470)
 user_out = Text(root, height=5, width = 19, bd=0)
 user_out.tag_configure("center",justify='center')
 user_out.place(x=195,y=260)
+ai_out = Text(root, height=5, width = 19, bd=0)
+ai_out.tag_configure("center",justify='center')
+ai_out.place(x=450,y=20)
            
 root.mainloop()
