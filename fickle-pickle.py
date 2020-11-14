@@ -1,13 +1,33 @@
 from tkinter import *
 import urllib.request
 
+from chatterbot import ChatBot
+from chatterbot.trainers import ListTrainer
+from chatterbot.trainers import ChatterBotCorpusTrainer
+
+chatbot = ChatBot(
+        "Ron",
+        storage_adapter='chatterbot.storage.SQLStorageAdapter',
+        logic_adapters=[
+            'chatterbot.logic.BestMatch'
+        ],
+        database_uri='sqlite:///database.db'
+        )
+
+trainer = ChatterBotCorpusTrainer(chatbot)
+
+trainer.train("chatterbot.corpus.english")
+
+
 #Closes the application
 def close():
     root.destroy()
 
 #Gets text in the box and prints it (for now)
 def update(event=None):
-    print(user_in.get())
+    print("User: ", user_in.get())
+    bot_response = chatbot.get_response(user_in.get())
+    print("Computer: ", bot_response)
     user_in.delete(0,len(user_in.get()))
     
 urllib.request.urlretrieve("https://raw.githubusercontent.com/ryanelake/fickle-pickle/main/icon.ico", "icon.ico")
